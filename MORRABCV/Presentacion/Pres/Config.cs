@@ -37,10 +37,10 @@ namespace Presentacion.Reportes
             return admXMLConf.setItemsBD(nom, servidor, usuario, pwd, tipoBD);
         }
 
-        public ConfMail getConfMail()
-        {
-            return (ConfMail)this.generaValue("Mail", admXMLConf.getItemsMail());
-        }
+        //public ConfMail getConfMail()
+        //{
+        //    return (ConfMail)this.generaValue("Mail", admXMLConf.getItemsMail());
+        //}
 
         public bool setConfMail(string Cta_Envio, string Usuario, string Pwd, string Host, string PuertoSalida, string Destinatarios, string Asunto, string Mensaje, string Envia)
         {
@@ -97,11 +97,11 @@ namespace Presentacion.Reportes
                     tipo = (new ConfBD()).GetType();
                     objTem = this.setColeValueOrig(ref tipo, ref col);
                     break;
-                case "Mail":
-                    tipo = (new ConfMail()).GetType();
-                    objTem = this.setColeValueOrig(ref tipo, ref col);
+                //case "Mail":
+                //    tipo = (new ConfMail()).GetType();
+                //    objTem = this.setColeValueOrig(ref tipo, ref col);
 
-                    break;
+                //    break;
                 case "Archs":
                     tipo = (new ConfArch()).GetType();
                     objTem = this.setColeValueOrig(ref tipo, ref col);
