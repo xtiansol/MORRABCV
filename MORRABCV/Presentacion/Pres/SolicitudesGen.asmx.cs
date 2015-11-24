@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 
-namespace Presentacion.Reportes
+namespace Presentacion.Pres
 {
     /// <summary>
     /// Summary description for SolicitudesGen
@@ -136,123 +136,123 @@ namespace Presentacion.Reportes
             return string.Format("{{ \"mensaje\" : \"{0} \" }}", "Agregado");
         }
 
-        [WebMethod(EnableSession = true)]
-        public string ObtieneTablasBD()
-        {
-            string respuesta = "{\"resp\":{\"listaGen\":";
-            string resp1 = "";
-            string sep = "";
+        //[WebMethod(EnableSession = true)]
+        //public string ObtieneTablasBD()
+        //{
+        //    string respuesta = "{\"resp\":{\"listaGen\":";
+        //    string resp1 = "";
+        //    string sep = "";
 
-            ArrayList listaTablas = new ArrayList();
-            int cont;
+        //    ArrayList listaTablas = new ArrayList();
+        //    int cont;
 
-            ArrayList colbd = new ArrayList();
-            colbd = ServiciosGen.getTablasBase();
-            cont = 0;
-            while (cont < colbd.Count)
-            {
-                ArrayList reg = new ArrayList();
-                reg = (ArrayList)colbd[cont];
-                resp1 = resp1 + sep + "\"" + ((string)reg[1]) + "\" ";
-                sep = ",";
-                cont++;
-            }
+        //    ArrayList colbd = new ArrayList();
+        //    colbd = ServiciosGen.getTablasBase();
+        //    cont = 0;
+        //    while (cont < colbd.Count)
+        //    {
+        //        ArrayList reg = new ArrayList();
+        //        reg = (ArrayList)colbd[cont];
+        //        resp1 = resp1 + sep + "\"" + ((string)reg[1]) + "\" ";
+        //        sep = ",";
+        //        cont++;
+        //    }
 
-            respuesta = respuesta + "[" + resp1 + "], \"respuesta\":\"Exito\"}}";
+        //    respuesta = respuesta + "[" + resp1 + "], \"respuesta\":\"Exito\"}}";
 
-            return respuesta;
-            //agregaFiltros();
-        }
+        //    return respuesta;
+        //    //agregaFiltros();
+        //}
 
-        [WebMethod(EnableSession = true)]
-        public string ObtieneTablasRelacionadas(String tablas)
-        {
-            string respuesta = "{\"resp\":{\"listaGen\":";
-            string resp1 = "";
-            string sep = "";
-            if (tablas != "")
-            {
-                string[] words = tablas.Split('|');
-                ArrayList listaTablas = new ArrayList();
-                int cont;
-                for (cont = 0; cont < words.Length; cont++)
-                {
-                    if (words[cont] != "")
-                    {
-                        listaTablas.Add(words[cont]);
-                    }
+        //[WebMethod(EnableSession = true)]
+        //public string ObtieneTablasRelacionadas(String tablas)
+        //{
+        //    string respuesta = "{\"resp\":{\"listaGen\":";
+        //    string resp1 = "";
+        //    string sep = "";
+        //    if (tablas != "")
+        //    {
+        //        string[] words = tablas.Split('|');
+        //        ArrayList listaTablas = new ArrayList();
+        //        int cont;
+        //        for (cont = 0; cont < words.Length; cont++)
+        //        {
+        //            if (words[cont] != "")
+        //            {
+        //                listaTablas.Add(words[cont]);
+        //            }
 
-                }
+        //        }
 
-                ArrayList colbd = new ArrayList();
-                colbd = ServiciosGen.getTablasRelacionadas(listaTablas);
-                cont = 0;
-                while (cont < colbd.Count)
-                {
-                    ArrayList reg = new ArrayList();
-                    reg = (ArrayList)colbd[cont];
-                    resp1 = resp1 + sep + "\"" + ((string)reg[1]) + "\" ";
-                    sep = ",";
-                    cont++;
-                }
+        //        ArrayList colbd = new ArrayList();
+        //        colbd = ServiciosGen.getTablasRelacionadas(listaTablas);
+        //        cont = 0;
+        //        while (cont < colbd.Count)
+        //        {
+        //            ArrayList reg = new ArrayList();
+        //            reg = (ArrayList)colbd[cont];
+        //            resp1 = resp1 + sep + "\"" + ((string)reg[1]) + "\" ";
+        //            sep = ",";
+        //            cont++;
+        //        }
 
-                respuesta = respuesta + "[" + resp1 + "], \"respuesta\":\"Exito\"}}";
-            }
-            else
-            {
-                respuesta = respuesta + "[], \"respuesta\":\"Error\", \"Error\":\"Error\"}}";
-            }
+        //        respuesta = respuesta + "[" + resp1 + "], \"respuesta\":\"Exito\"}}";
+        //    }
+        //    else
+        //    {
+        //        respuesta = respuesta + "[], \"respuesta\":\"Error\", \"Error\":\"Error\"}}";
+        //    }
 
-            return respuesta;
-        }
+        //    return respuesta;
+        //}
 
-        [WebMethod(EnableSession = true)]
-        public string ObtieneCamposTablas(String tablas)
-        {
-            string respuesta = "{\"resp\":{\"listaGen\":";
-            string resp1 = "";
-            string sep = "";
+        //[WebMethod(EnableSession = true)]
+        //public string ObtieneCamposTablas(String tablas)
+        //{
+        //    string respuesta = "{\"resp\":{\"listaGen\":";
+        //    string resp1 = "";
+        //    string sep = "";
 
-            string tablaUso = "";
-            if (tablas != "")
-            {
-                string[] words = tablas.Split('|');
-                ArrayList listaTablas = new ArrayList();
-                int cont;
-                for (cont = 0; cont < words.Length; cont++)
-                {
-                    if (words[cont] != "")
-                    {
-                        listaTablas.Add(words[cont]);
-                        tablaUso = words[cont];
-                    }
+        //    string tablaUso = "";
+        //    if (tablas != "")
+        //    {
+        //        string[] words = tablas.Split('|');
+        //        ArrayList listaTablas = new ArrayList();
+        //        int cont;
+        //        for (cont = 0; cont < words.Length; cont++)
+        //        {
+        //            if (words[cont] != "")
+        //            {
+        //                listaTablas.Add(words[cont]);
+        //                tablaUso = words[cont];
+        //            }
 
-                }
+        //        }
 
-                for (cont = 0; cont < listaTablas.Count; cont++)
-                {
-                    ArrayList colbd = new ArrayList();
-                    colbd = ServiciosGen.getCamposTablasBaseSQLServer((string)listaTablas[cont]);
-                    cont = 0;
-                    while (cont < colbd.Count)
-                    {
-                        ArrayList reg = new ArrayList();
-                        reg = (ArrayList)colbd[cont];
-                        resp1 = resp1 + sep + "\"" + ((string)reg[2]) + "\" ";
-                        sep = ",";
-                        cont++;
-                    }
-                }
-                Session["tablaEnUso"] = tablaUso;
-                respuesta = respuesta + "[" + resp1 + "], \"respuesta\":\"Exito\"}}";
-            }
-            else
-            {
-                respuesta = respuesta + "[], \"respuesta\":\"Error\", \"Error\":\"Error\"}}";
-            }
+        //        for (cont = 0; cont < listaTablas.Count; cont++)
+        //        {
+        //            ArrayList colbd = new ArrayList();
+        //            colbd = ServiciosGen.getCamposTablasBaseSQLServer((string)listaTablas[cont]);
+        //            cont = 0;
+        //            while (cont < colbd.Count)
+        //            {
+        //                ArrayList reg = new ArrayList();
+        //                reg = (ArrayList)colbd[cont];
+        //                resp1 = resp1 + sep + "\"" + ((string)reg[2]) + "\" ";
+        //                sep = ",";
+        //                cont++;
+        //            }
+        //        }
+        //        Session["tablaEnUso"] = tablaUso;
+        //        respuesta = respuesta + "[" + resp1 + "], \"respuesta\":\"Exito\"}}";
+        //    }
+        //    else
+        //    {
+        //        respuesta = respuesta + "[], \"respuesta\":\"Error\", \"Error\":\"Error\"}}";
+        //    }
 
-            return respuesta;
-        }
+        //    return respuesta;
+        //}
 
 
         [WebMethod(EnableSession = true)]

@@ -1,7 +1,7 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PaginaMaestra/Site.Master" AutoEventWireup="true" CodeBehind="frmCaseta.aspx.cs" Inherits="Presentacion.Pres.frmCaseta" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PaginaMaestra/Site.Master" AutoEventWireup="true" CodeBehind="frmRegistro.aspx.cs" Inherits="Presentacion.Pres.frmRegistro" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-    <div style="">
+
+       <div style="">
 
         <%--<asp:ScriptManager ID="ScriptManager1" runat="server" />--%>
         <asp:UpdatePanel ID="UpdatePanel1" runat="server">
@@ -92,4 +92,5 @@
             </ContentTemplate>
         </asp:UpdatePanel>
     </div>
+
 </asp:Content>
