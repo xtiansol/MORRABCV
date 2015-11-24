@@ -248,7 +248,7 @@ namespace Presentacion.Pres
         public static ArrayList getAgendaHr(string idUS)
         {
 
-            string SQL = "SELECT HR.IDHORA, HR.DES_HORA " +
+            string SQL = "SELECT DISTINCT HR.IDHORA, HR.DES_HORA " +
                         "FROM " +
                         "HORAS HR, " +
                         "AGENDA AG " +
