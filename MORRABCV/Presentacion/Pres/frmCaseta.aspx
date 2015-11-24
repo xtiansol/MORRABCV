@@ -96,6 +96,12 @@
                                     
                                 </tr>
                                 <tr>
+                                    <td>
+                                        <asp:Label ID="idRespuesta" runat="server" Text="   "></asp:Label>
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
                                     <td><asp:Button CssClass="btnGuarda" ID="idButReg" runat="server" Text="Registrar"  OnClientClick="javascript:return marcaRegistro()" OnClick="idButReg_Click" />
                                         <asp:HiddenField ID="idAgendaHid" Value="" runat="server" />
                                         <asp:HiddenField ID="idUsHid" Value="" runat="server" />

@@ -3,23 +3,40 @@
 
      <script  type="text/javascript">
          var gPrefijo = "MainContent_";
+
          function marcaRegistro() {
              var datIdUs = "";
+             var datIdAg = "";
              var descrip = "";
              var sep = "";
              $("input[type=checkbox]:checked").each(function () {
                  //cada elemento seleccionado
                  list = $(this).attr("id").split("-");
                  datIdUs = datIdUs + sep + list[2];
-                 des = $("#"+gPrefijo+"txtBox"+list[2]).val();
-                 descrip = descrip + sep +"'"+des+"'";
-                 sep =","
+                 datIdAg = datIdAg + sep + list[3];
+                 des = $("#" + gPrefijo + "txtBox" + list[2]).val();
+                 descrip = descrip + sep + "'" + des + "'";
+                 sep = ","
              });
-             alert("datIdUs:" + datIdUs);
-             alert("descrip:" + descrip);
-             return false;
+             //alert("datIdUs:" + datIdUs);
+             //alert("datIdAg:"+datIdAg);
+
+             if (datIdUs != "") {
+                 $("#" + gPrefijo + "idUsHid").val(datIdUs);
+                 $("#" + gPrefijo + "idAgendaHid").val(datIdAg);
+                 $("#" + gPrefijo + "idDesHid").val(descrip);
+
+             } else {
+                 alert("Debe seleccionar algun asistente.");
+                 return false;
+             }
+             return true;
          }
      </script>
+
+
+
+
 
 
        <div style="">
@@ -90,9 +107,16 @@
                                     
                                 </tr>
                                 <tr>
-                                    <td><asp:Button CssClass="btnGuarda" ID="idButReg" runat="server" Text="Registrar" OnClientClick="javascript:return marcaRegistro()" />
+                                    <td>
+                                        <asp:Label ID="idRespuesta" runat="server" Text="   "></asp:Label>
+                                    </td>
+                                    
+                                </tr>
+                                <tr>
+                                    <td><asp:Button CssClass="btnGuarda" ID="idButReg" runat="server" Text="Registrar" OnClientClick="javascript:return marcaRegistro()" OnClick="idButReg_Click1" />
                                         <asp:HiddenField ID="idAgendaHid" Value="" runat="server" />
                                         <asp:HiddenField ID="idUsHid" Value="" runat="server" />
+                                        <asp:HiddenField ID="idDesHid" Value="" runat="server" />
                                     </td>
                                 </tr>
                             </table>

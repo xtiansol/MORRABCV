@@ -117,11 +117,11 @@ namespace Presentacion.Pres
             PanelConVisita.Controls.Clear();
             PanelConVisita.Controls.Add(new LiteralControl("<table border='1'> <tr class='Titulo' ><td>NOMBRE VISITANTE</td><td>&nbsp;</td><td>Asistió</td><td>Descripción</td></tr> "));
 
-            ArrayList arrVisitantes = ServiciosGen.getAgendaVisitantes(idUS, idHora, "E");
+            ArrayList arrVisitantes = ServiciosGen.getRegistroVisitantes(idUS, idHora, "E");
 
             foreach (ArrayList v1 in arrVisitantes)
             {
-                agregarVisitante((string)v1[0], (string)v1[1]);
+                agregarVisitante((string)v1[0], (string)v1[1], (string)v1[9]);
                 idAgendaHid.Value = (string)v1[9];
             }
 
@@ -130,7 +130,7 @@ namespace Presentacion.Pres
 
 
         }
-        protected void agregarVisitante(string idUS, string nombre)
+        protected void agregarVisitante(string idUS, string nombre, string idAgenda)
         {
             try
             {
@@ -138,7 +138,8 @@ namespace Presentacion.Pres
                 campoSel.Text = nombre;
 
                 CheckBox chB = new CheckBox();
-                chB.ID = "-checkId-" + idUS;
+
+                chB.ID = "-checkId-" + idUS + "-" + idAgenda; ;
 
                 TextBox tBox = new TextBox();
                 tBox.ID = "txtBox" + idUS;
@@ -175,6 +176,52 @@ namespace Presentacion.Pres
             {
                 return;
             }
+        }
+
+        protected void idButReg_Click(object sender, EventArgs e)
+        {
+            string agendaID = idAgendaHid.Value;
+            string idUss = idUsHid.Value;
+
+            string[] words = agendaID.Split(',');
+            string[] words2 = idUss.Split(',');
+
+            for (int cont = 0; cont < words.Length; cont++)
+            {
+                String idAg = words[cont];
+                string idUs = words2[cont];
+                if (idAg != "" && idUs != "")
+                {
+                    ServiciosGen.agregaControlVisita(idAg, idUs);
+                }
+            }
+
+            Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
+        }
+
+        protected void idButReg_Click1(object sender, EventArgs e)
+        {
+            string agendaID = idAgendaHid.Value;
+            string idUss = idUsHid.Value;
+            string observs = idDesHid.Value;
+
+            string[] words = agendaID.Split(',');
+            string[] words2 = idUss.Split(',');
+            string[] words3 = observs.Split(',');
+
+            for (int cont = 0; cont < words.Length; cont++)
+            {
+                String idAg = words[cont];
+                string idUs = words2[cont];
+                string obs = words3[cont];
+                if (idAg != "" && idUs != "")
+                {
+                    ServiciosGen.actualizaRegistro(idAg, idUs, obs);
+                }
+            }
+
+            //Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
+            idRespuesta.Text = "Registro exitoso...";
         }
     }
 }

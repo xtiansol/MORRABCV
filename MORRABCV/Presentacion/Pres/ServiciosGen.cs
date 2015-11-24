@@ -176,7 +176,10 @@ namespace Presentacion.Pres
                         " WHERE " +
                         " AG1.ID_ANFITRION = " + idUS +
                         " AND AG1.HORA = "+ idHora +
-                        ") ";
+                        ") " +
+                        " AND ( NOT EXISTS(SELECT CV.AGENDA_ID, CV.PERSONA_ID FROM CONTROLVISITAS CV WHERE CV.AGENDA_ID IN( "+
+                         " SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = "+idUS+" AND AG1.HORA = " + idHora +
+                         " )  AND  CV.PERSONA_ID = PR.PERSONA_ID )) ";
 
 
             if (tpUs != null && tpUs != "")
@@ -188,6 +191,53 @@ namespace Presentacion.Pres
             return sqlDispatcher.getColConsulta(SQL);
         }
 
+        public static ArrayList getRegistroVisitantes(string idUS, string idHora, string tpUs)
+        {
+
+            string SQL = "SELECT DISTINCT PR.PERSONA_ID , " +
+                        "PR.NOMBRE + ' ' + PR.AP_PATERNO + ' ' + PR.AP_MATERNO, " +
+                        "PR.PUESTO_ID, " +
+                        "PUE.DESC_PUESTO, " +
+                        "MV.ID_VISITA, " +
+                        "MV.DESC_VISITA, " +
+                        "HRS.IDHORA, " +
+                        "HRS.DES_HORA, " +
+                        "AG.FECHA_INICIO, " +
+                        "AG.AGENDA_ID " +
+                        "FROM " +
+                        "AGENDA AG, " +
+                        "PREREGISTRO PR, " +
+                        "MOTIVO_VISITA MV, " +
+                        "PUESTO PUE, " +
+                        "HORAS HRS " +
+                        "WHERE " +
+                        "AG.FECHA_INICIO = CONVERT(DATE, GETDATE()) " +
+                        "AND AG.ID_CONTACTO = PR.PERSONA_ID " +
+                        "AND PUE.ID_PUESTO = PR.PUESTO_ID " +
+                        "AND MV.ID_VISITA = AG.MVO_VISITA_ID " +
+                        "AND HRS.IDHORA = AG.HORA " +
+                        //                        "AND PR.ESTADO_REGISTRO = '"+tpUs+"' "+
+                        "AND AG.AGENDA_ID IN ( " +
+                        " SELECT AG1.AGENDA_ID " +
+                        " FROM " +
+                        " AGENDA AG1 " +
+                        " WHERE " +
+                        " AG1.ID_ANFITRION = " + idUS +
+                        " AND AG1.HORA = " + idHora +
+                        ") " +
+                        " AND ( EXISTS(SELECT CV.AGENDA_ID, CV.PERSONA_ID FROM CONTROLVISITAS CV WHERE CV.AGENDA_ID IN( " +
+                         " SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = " + idUS + " AND AG1.HORA = " + idHora +
+                         " )  AND  CV.PERSONA_ID = PR.PERSONA_ID )) ";
+
+
+            if (tpUs != null && tpUs != "")
+            {
+                SQL = SQL + " AND PR.ESTADO_REGISTRO = '" + tpUs + "'";
+            }
+
+            sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
+            return sqlDispatcher.getColConsulta(SQL);
+        }
 
         public static ArrayList getAgendaHr(string idUS)
         {
@@ -207,7 +257,6 @@ namespace Presentacion.Pres
             sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
             return sqlDispatcher.getColConsulta(SQL);
         }
-
 
 
         public static ArrayList getHr(string idHr)
@@ -249,9 +298,13 @@ namespace Presentacion.Pres
             return sqlDispatcher.ejecutaSQL(sql);
         }
 
+        public static Boolean actualizaRegistro(string idAgenda, string idUs, string observaciones)
+        {
+            string sql = "INSERT INTO REGISTRO VALUES(" + idAgenda + ", " + idUs + ", GetDate(),"+observaciones+")";
+            //string sql = "UPDATE REGISTRO SET HORA_LLEGADA = GetDate(), OBSERVACIONES = '"+observaciones+"' WHERE AGENDA_ID = " + idAgenda + " AND  PERSONA_ID = " + idUs + " ";
+            return sqlDispatcher.ejecutaSQL(sql);
 
-
-  
+        }
 
         public static string toStringArrayList(ArrayList lista, string sep)
         {

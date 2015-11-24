@@ -189,7 +189,8 @@ namespace Presentacion.Pres
                 }
             }
 
-            Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
+            //Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
+            idRespuesta.Text = "Se registro la asistencia...";
         }
     }
 
