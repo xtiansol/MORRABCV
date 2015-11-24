@@ -2,7 +2,7 @@
 using System.Collections;
 using AdminBD;
 
-namespace Presentacion.Reportes
+namespace Presentacion.Pres
 {
     public class ServiciosGen
     {
@@ -38,40 +38,89 @@ namespace Presentacion.Reportes
 
         }
 
-        public static ArrayList getAgenda()
+        public static void inicio()
         {
             config.getConfiguraciones();
             confArch = config.getConfArch();
             confBD = config.getConfBD();
+        }
+
+        public static ArrayList getAgenda(string idAgenda)
+        {
+
             sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
-            return sqlDispatcher.getColConsulta("SELECT  P.*  FROM  AGENDA P ");
+
+
+            string SQL = "SELECT  P.*  FROM  AGENDA P ";
+
+            if (idAgenda != null && idAgenda != "" && idAgenda != "0")
+            {
+                SQL = SQL + "AND P.AGENDA_ID = " + idAgenda;
+            }
+
+
+            return sqlDispatcher.getColConsulta(SQL);
         }
 
 
-        public static ArrayList getAgendaCD()
+        public static ArrayList getAgendaCD(string idAgenda)
         {
+
+            string SQL = "SELECT AG.AGENDA_ID, " +
+                        "AG.NOMBRE, AG.AP_PATERNO, AG.AP_MATERNO, " +
+                        "AG.PUESTO_ID, " +
+                        "PU.DESC_PUESTO, " +
+                        "AG.MVO_VISITA_ID, " +
+                        "MV.DESC_VISITA, " +
+                        "AG.HORA, " +
+                        "AG.FECHA_INICIO " +
+                        "FROM " +
+                        "AGENDA AG, " +
+                        "MOTIVO_VISITA MV, " +
+                        "PUESTO PU " +
+                        "WHERE " +
+                        "AG.MVO_VISITA_ID = MV.ID_VISITA " +
+                        "AND AG.PUESTO_ID = PU.ID_PUESTO ";
+
+            if (idAgenda != null && idAgenda != "" && idAgenda != "0")
+            {
+                SQL = SQL + "AND AG.AGENDA_ID = " + idAgenda;
+            }
+
             sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
-            return sqlDispatcher.getColConsulta("SELECT AG.AGENDA_ID, " +
-                                                "AG.NOMBRE, AG.AP_PATERNO, AG.AP_MATERNO, " +
-                                                "AG.PUESTO_ID, " +
-                                                "PU.DESC_PUESTO, " +
-                                                "AG.MVO_VISITA_ID, " +
-                                                "MV.DESC_VISITA, " +
-                                                "AG.HORA " +
+            return sqlDispatcher.getColConsulta(SQL);
+        }
+
+        public static ArrayList getHr(string idHr)
+        {
+
+            string SQL = "SELECT HR.IDHORA, HR.DES_HORA " +
                                                 "FROM " +
-                                                "AGENDA AG, " +
-                                                "MOTIVO_VISITA MV, " +
-                                                "PUESTO PU " +
-                                                "WHERE " +
-                                                "AG.MVO_VISITA_ID = MV.ID_VISITA " +
-                                                "AND AG.PUESTO_ID = PU.ID_PUESTO ");
-        } 
+                                                "HORAS HR ";
 
+            if (idHr != null && idHr != "" && idHr != "0")
+            {
+                SQL = SQL + "WHERE HR.IDHORA = " + idHr;
+            }
 
-        public static ArrayList getCaseta()
-        {
             sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
-            return sqlDispatcher.getColConsulta("SELECT  P.*  FROM  CASETA P ");
+            return sqlDispatcher.getColConsulta(SQL);
+        }
+
+
+
+        public static ArrayList getCaseta(string idCaseta)
+        {
+
+            string SQL = "SELECT  P.*  FROM  CASETA P ";
+
+            if (idCaseta != null && idCaseta != "" && idCaseta != "0")
+            {
+                SQL = SQL + "WHERE P.CASETA_ID = " + idCaseta;
+            }
+
+            sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
+            return sqlDispatcher.getColConsulta(SQL);
         }
 
 

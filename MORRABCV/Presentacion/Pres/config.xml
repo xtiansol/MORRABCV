@@ -5,7 +5,7 @@
 			<value>MORRABCV_PRUEBAS</value>
 		</item>
 		<item name="Servidor" >
-			<value>DESKTOP-T62LOJN\SQLEXPRESS2</value>
+			<value>XDS-CSA\SQLEXPRESS2</value>
 		</item>
 		<item name="Us" >
 			<value>sa</value>

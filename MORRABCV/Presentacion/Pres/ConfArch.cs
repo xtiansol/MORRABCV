@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Presentacion.Reportes
+namespace Presentacion.Pres
 {
     public class ConfArch
     {

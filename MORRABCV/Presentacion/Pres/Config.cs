@@ -8,11 +8,11 @@ using AdminXML;
 using AdminReflex;
 using System.IO;
 
-namespace Presentacion.Reportes
+namespace Presentacion.Pres
 {
     public class Config
     {
-        private string ruta = (System.AppDomain.CurrentDomain.BaseDirectory + "Reportes\\" + "config.xml");
+        private string ruta = (System.AppDomain.CurrentDomain.BaseDirectory + "Pres\\" + "config.xml");
 
         private AdminXML.AdminXMLConf admXMLConf = new AdminXML.AdminXMLConf();
 
