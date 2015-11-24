@@ -121,7 +121,7 @@ namespace Presentacion.Pres
 
             foreach(ArrayList v1 in arrVisitantes)
             {
-                agregarVisitante((string)v1[0], (string)v1[1]);
+                agregarVisitante((string)v1[0], (string)v1[1],(string)v1[9]);
             }
 
             PanelConVisita.Controls.Add(new LiteralControl("</table>"));
@@ -129,7 +129,7 @@ namespace Presentacion.Pres
 
 
         }
-        protected void agregarVisitante(string idUS, string nombre)
+        protected void agregarVisitante(string idUS, string nombre, string idAgenda)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace Presentacion.Pres
                 campoSel.Text = nombre;
 
                 CheckBox chB = new CheckBox();
-                chB.ID = "checkId"+idUS;
+                chB.ID = "-checkId-"+idUS+"-"+idAgenda;
           
 
                 HiddenField nuevoHidF = new HiddenField();
@@ -169,6 +169,27 @@ namespace Presentacion.Pres
             {
                 return;
             }
+        }
+
+        protected void idButReg_Click(object sender, EventArgs e)
+        {
+            string agendaID = idAgendaHid.Value;
+            string idUss = idUsHid.Value;
+
+            string[] words = agendaID.Split(',');
+            string[] words2 = idUss.Split(',');
+
+            for (int cont = 0; cont < words.Length; cont++)
+            {
+                String idAg = words[cont];
+                string idUs = words2[cont];
+                if (idAg != "" && idUs != "")
+                {
+                    ServiciosGen.agregaControlVisita(idAg, idUs);
+                }
+            }
+
+            Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
         }
     }
 

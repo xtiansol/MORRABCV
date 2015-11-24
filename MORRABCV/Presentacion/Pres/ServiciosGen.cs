@@ -154,7 +154,8 @@ namespace Presentacion.Pres
                         "MV.DESC_VISITA, " +
                         "HRS.IDHORA, " +
                         "HRS.DES_HORA, " +
-                        "AG.FECHA_INICIO " +
+                        "AG.FECHA_INICIO, " +
+                        "AG.AGENDA_ID " +
                         "FROM " +
                         "AGENDA AG, " +
                         "PREREGISTRO PR, " +
@@ -241,32 +242,16 @@ namespace Presentacion.Pres
             return sqlDispatcher.getColConsulta(SQL);
         }
 
-
-        public static Boolean agregaReporteConsulta(string nombreReporte, string cadenaCampos, string cadenaConsultaReporte)
+        public static Boolean agregaControlVisita(string idAgenda, string idUs)
         {
-            cadenaConsultaReporte = cadenaConsultaReporte.Replace("'", "''");
-            string sql = "INSERT INTO HISTORICO_REPORTES VALUES('" + nombreReporte + "', '" + cadenaCampos + "','" + cadenaConsultaReporte + "', GetDate(), 1);";
+
+            string sql = "INSERT INTO CONTROLVISITAS VALUES(" + idAgenda + ", " + idUs + ", GetDate())";
             return sqlDispatcher.ejecutaSQL(sql);
         }
 
-        public static ArrayList joinNombreAlias(ArrayList lNombre, ArrayList lAlias, string sep)
-        {
-            ArrayList resp = new ArrayList();
-            if (sep == "")
-            {
-                sep = ".";
-            }
 
-            if (lNombre != null && lAlias != null)
-            {
-                for (int cont = 0; cont < lNombre.Count; cont++)
-                {
-                    resp.Add(lAlias[cont] + sep + lNombre[cont]);
-                }
 
-            }
-            return resp;
-        }
+  
 
         public static string toStringArrayList(ArrayList lista, string sep)
         {
@@ -287,17 +272,7 @@ namespace Presentacion.Pres
             return resp;
         }
 
-        // Recupera las tablas base de la BD
-        public static ArrayList getHistorico()
-        {
-            sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
-            return sqlDispatcher.getColConsulta("SELECT TOP 30 * FROM HISTORICO_REPORTES ORDER BY FECHAREG desc");
-        }
-        public static ArrayList getHistoricoById(string id)
-        {
-            sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
-            return sqlDispatcher.getColConsulta("SELECT * FROM HISTORICO_REPORTES WHERE HISTORICOID = " + id + " ORDER BY FECHAREG");
-        }
+
 
         public static ArrayList getResultadoSQL(string sql)
         {

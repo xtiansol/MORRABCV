@@ -1,6 +1,32 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/PaginaMaestra/Site.Master" AutoEventWireup="true" CodeBehind="frmCaseta.aspx.cs" Inherits="Presentacion.Pres.frmCaseta" %>
-
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
+
+     <script type="text/javascript">
+         var gPrefijo = "MainContent_";
+         function marcaRegistro() {
+             var datIdUs = "";
+             var datIdAg = "";
+             var sep = "";
+             $("input[type=checkbox]:checked").each(function () {
+                 //cada elemento seleccionado
+                 list = $(this).attr("id").split("-");
+                 datIdUs = datIdUs + sep + list[2];
+                 datIdAg = datIdAg + sep + list[3];
+                 sep = ","
+             });
+             //alert("datIdUs:" + datIdUs);
+             //alert("datIdAg:"+datIdAg);
+
+             if (datIdUs != "") {
+                 $("#" + gPrefijo + "idUsHid").val(datIdUs);
+                 $("#" + gPrefijo + "idAgendaHid").val(datIdAg);
+             } else {
+                 alert("Debe seleccionar algun asistente.");
+                 return false;
+             }
+             return true;
+         }
+     </script>
     <div style="">
 
         <%--<asp:ScriptManager ID="ScriptManager1" runat="server" />--%>
@@ -70,7 +96,10 @@
                                     
                                 </tr>
                                 <tr>
-                                    <td><asp:Button CssClass="btnGuarda" ID="idButReg" runat="server" Text="Registrar" /></td>
+                                    <td><asp:Button CssClass="btnGuarda" ID="idButReg" runat="server" Text="Registrar"  OnClientClick="javascript:return marcaRegistro()" OnClick="idButReg_Click" />
+                                        <asp:HiddenField ID="idAgendaHid" Value="" runat="server" />
+                                        <asp:HiddenField ID="idUsHid" Value="" runat="server" />
+                                    </td>
                                 </tr>
                             </table>
 

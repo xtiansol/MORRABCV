@@ -122,6 +122,7 @@ namespace Presentacion.Pres
             foreach (ArrayList v1 in arrVisitantes)
             {
                 agregarVisitante((string)v1[0], (string)v1[1]);
+                idAgendaHid.Value = (string)v1[9];
             }
 
             PanelConVisita.Controls.Add(new LiteralControl("</table>"));
@@ -137,7 +138,7 @@ namespace Presentacion.Pres
                 campoSel.Text = nombre;
 
                 CheckBox chB = new CheckBox();
-                chB.ID = "checkId" + idUS;
+                chB.ID = "-checkId-" + idUS;
 
                 TextBox tBox = new TextBox();
                 tBox.ID = "txtBox" + idUS;
