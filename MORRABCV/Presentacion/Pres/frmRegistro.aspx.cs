@@ -27,6 +27,7 @@ namespace Presentacion.Pres
                     ListNombre.Items.Add(litem);
                 }
                 idButReg.Style.Add("display", "none");
+                idRespuesta.Text = "";
 
                 ListHr.Items.Add("Seleccionar...");
 
@@ -75,6 +76,7 @@ namespace Presentacion.Pres
                 LabelMotivo.Text = "";
                 LabelDia.Text = "";
                 LabelPuesto.Text = "";
+                idRespuesta.Text = "";
                 PanelConVisita.Controls.Clear();
                 idButReg.Style.Add("display", "none");
             }
@@ -105,6 +107,7 @@ namespace Presentacion.Pres
             {
                 LabelMotivo.Text = "";
                 LabelDia.Text = "";
+                idRespuesta.Text = "";
                 PanelConVisita.Controls.Clear();
                 idButReg.Style.Add("display", "none");
             }
