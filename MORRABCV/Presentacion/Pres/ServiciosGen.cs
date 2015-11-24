@@ -227,7 +227,13 @@ namespace Presentacion.Pres
                         ") " +
                         " AND ( EXISTS(SELECT CV.AGENDA_ID, CV.PERSONA_ID FROM CONTROLVISITAS CV WHERE CV.AGENDA_ID IN( " +
                          " SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = " + idUS + " AND AG1.HORA = " + idHora +
-                         " )  AND  CV.PERSONA_ID = PR.PERSONA_ID )) ";
+                         " )  AND  CV.PERSONA_ID = PR.PERSONA_ID )) "+
+
+                         " AND( NOT EXISTS( " +
+                         " SELECT * FROM REGISTRO REG " +
+                         " WHERE " +
+                         " REG.AGENDA_ID IN(SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = "+idUS+" AND AG1.HORA = "+idHora+") " +
+                         " AND REG.PERSONA_ID = PR.PERSONA_ID ))";
 
 
             if (tpUs != null && tpUs != "")
