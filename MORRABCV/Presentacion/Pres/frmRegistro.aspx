@@ -23,7 +23,6 @@
                         <tr>
                             <td colspan="3">&nbsp;</td>
                         </tr>
-
                         <tr>
                             <td colspan="3">
                                                     <asp:Panel ID="PanelInterno" runat="server" 
