@@ -19,7 +19,7 @@ namespace Presentacion.Pres
     {
 
         [WebMethod(EnableSession = true)]
-        public string AgregaFiltros(String filtroFin, String campos)
+        public string registraVisita(String filtroFin, String campos)
         {
             string filtrosCom = filtroFin;
             string camposNom = campos;
@@ -255,27 +255,27 @@ namespace Presentacion.Pres
         //}
 
 
-        [WebMethod(EnableSession = true)]
-        public string GuardaReporteHistorial(String nombreReporte)
-        {
-            if (nombreReporte != "")
-            {
-                Session["nombreReporte"] = nombreReporte;
-                ArrayList listGenReporte = (ArrayList)Session["listGenReporte"];
-                if (ServiciosGen.agregaReporteConsulta(nombreReporte, (string)listGenReporte[0], (string)listGenReporte[1]))
-                {
-                    return string.Format("{{ \"mensaje\" : \"{0} \" }}", "Reporte Agregado a historial.");
-                }
-                else
-                    return string.Format("{{ \"mensaje\" : \"{0} \" }}", "Error al agregar reporte a historial.");
-            }
-            else
-            {
-                return string.Format("{{ \"mensaje\" : \"{0} \" }}", "Ingrese un nombre valido.");
+        //[WebMethod(EnableSession = true)]
+        //public string GuardaReporteHistorial(String nombreReporte)
+        //{
+        //    if (nombreReporte != "")
+        //    {
+        //        Session["nombreReporte"] = nombreReporte;
+        //        ArrayList listGenReporte = (ArrayList)Session["listGenReporte"];
+        //        if (ServiciosGen.agregaReporteConsulta(nombreReporte, (string)listGenReporte[0], (string)listGenReporte[1]))
+        //        {
+        //            return string.Format("{{ \"mensaje\" : \"{0} \" }}", "Reporte Agregado a historial.");
+        //        }
+        //        else
+        //            return string.Format("{{ \"mensaje\" : \"{0} \" }}", "Error al agregar reporte a historial.");
+        //    }
+        //    else
+        //    {
+        //        return string.Format("{{ \"mensaje\" : \"{0} \" }}", "Ingrese un nombre valido.");
 
-            }
+        //    }
 
-        }
+        //}
 
 
         [WebMethod(EnableSession = true)]
