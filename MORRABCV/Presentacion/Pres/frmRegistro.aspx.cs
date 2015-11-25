@@ -40,6 +40,8 @@ namespace Presentacion.Pres
 
             if (ListNombre.SelectedIndex > 0)
             {
+                idRespuesta.Text = "";
+                idButReg.Style.Add("display", "none");
                 ListItem nombreItm = ListNombre.SelectedItem;
                 ArrayList listHoras = ServiciosGen.getAgendaHr(nombreItm.Value);
 
@@ -77,7 +79,7 @@ namespace Presentacion.Pres
                 LabelDia.Text = "";
                 LabelPuesto.Text = "";
                 idRespuesta.Text = "";
-                PanelConVisita.Controls.Clear();
+                //PanelConVisita.Controls.Clear();
                 idButReg.Style.Add("display", "none");
             }
         }
@@ -87,6 +89,8 @@ namespace Presentacion.Pres
 
             if (ListHr.SelectedIndex > 0)
             {
+                idRespuesta.Text = "";
+                idButReg.Style.Add("display", "none");
                 ListItem nombreItm = ListNombre.SelectedItem;
                 ListItem hrItm = ListHr.SelectedItem;
 
@@ -108,7 +112,7 @@ namespace Presentacion.Pres
                 LabelMotivo.Text = "";
                 LabelDia.Text = "";
                 idRespuesta.Text = "";
-                PanelConVisita.Controls.Clear();
+                //PanelConVisita.Controls.Clear();
                 idButReg.Style.Add("display", "none");
             }
         }
@@ -118,7 +122,7 @@ namespace Presentacion.Pres
         {
             //            camposFin.Clear();
             PanelConVisita.Controls.Clear();
-            PanelConVisita.Controls.Add(new LiteralControl("<table border='1'> <tr class='Titulo' ><td>NOMBRE VISITANTE</td><td>&nbsp;</td><td>Asistió</td><td>Descripción</td></tr> "));
+            PanelConVisita.Controls.Add(new LiteralControl("<table border='1' width ='90%' > <tr style='background-color:#990000'><td style='width:50%'>NOMBRE VISITANTE</td><td style='width:10%'>&nbsp;</td><td  style='width:10%'>Asistió</td><td  style='width:30%'>Descripción</td></tr> "));
 
             ArrayList arrVisitantes = ServiciosGen.getRegistroVisitantes(idUS, idHora, "E");
 
