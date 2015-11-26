@@ -31,6 +31,40 @@ namespace Presentacion.Pres
 
                 ListHr.Items.Add("Seleccionar...");
 
+
+                ArrayList listTPAuto = ServiciosGen.getTPAuto(null);
+                ListaTPAuto.Items.Clear();
+                ListaTPAuto.Items.Add("Seleccionar...");
+                foreach (ArrayList rTPA in listTPAuto)
+                {
+                    ListItem litem = new ListItem();
+                    litem.Value = (string)rTPA[0];
+                    litem.Text = "" + rTPA[1];
+                    ListaTPAuto.Items.Add(litem);
+                }
+
+                ArrayList listMarca = ServiciosGen.getMarca(null);
+                ListaMarcaAuto.Items.Clear();
+                ListaMarcaAuto.Items.Add("Seleccionar...");
+                foreach (ArrayList rMA in listMarca)
+                {
+                    ListItem litem = new ListItem();
+                    litem.Value = (string)rMA[0];
+                    litem.Text = "" + rMA[1];
+                    ListaMarcaAuto.Items.Add(litem);
+                }
+
+                ArrayList listColor = ServiciosGen.getColor(null);
+                ListaColorAuto.Items.Clear();
+                ListaColorAuto.Items.Add("Seleccionar...");
+                foreach (ArrayList rCol in listColor)
+                {
+                    ListItem litem = new ListItem();
+                    litem.Value = (string)rCol[0];
+                    litem.Text = "" + rCol[1];
+                    ListaColorAuto.Items.Add(litem);
+                }
+
             }
         }
 
@@ -122,7 +156,7 @@ namespace Presentacion.Pres
         {
             //            camposFin.Clear();
             PanelConVisita.Controls.Clear();
-            PanelConVisita.Controls.Add(new LiteralControl("<table border='1' width ='100%' > <tr style='background-color:#990000'> <td  style='width:38%'>NOMBRE VISITANTE</td><td  style='width:18%'>TP VEHÍCULO</td><td  style='width:15%'>MARCA</td><td  style='width:10%'>COLOR</td><td  style='width:10%'>PLACA</td><td  style='width:10%'>Asistió</td></tr>"));
+            PanelConVisita.Controls.Add(new LiteralControl("<table border='1' width ='100%' > <tr style='background-color:#990000'> <td  style='width:38%'>NOMBRE VISITANTE</td><td  style='width:18%'>TP VEHÍCULO</td><td  style='width:15%'>MARCA</td><td  style='width:10%'>COLOR</td><td  style='width:10%'>PLACA</td><td  style='width:5%'>Asistió</td><td  style='width:5%'></td></tr>"));
 
             ArrayList arrVisitantes = ServiciosGen.getAgendaVisitantes(idUS, idHora, "E");
 
@@ -163,7 +197,19 @@ namespace Presentacion.Pres
                 Label lbPlaca = new Label();
                 lbPlaca.Text = (placa != null && placa.ToUpper() != "NULL") ? placa : "";
 
-                AgregarControles(campoSel, chB, nuevoHidF, lbTpVeh, lbMarca, lbColor, lbPlaca);
+                HyperLink linkAuto = null;
+
+                if (placa == null || placa.ToUpper() == "NULL" || placa == "" )
+                {
+                    linkAuto = new HyperLink();
+                    linkAuto.ID = "linkRepHis-" + idAgenda + "-" + idUS;
+                    linkAuto.Text = "Agrega Auto";
+                    //linkAuto.ImageUrl = "../Reportes/img/PDF-icon3.png";
+                    linkAuto.NavigateUrl = "#";
+                    linkAuto.Attributes.Add("onClick", "javascript:return ShowAgregaAutoModal(" + idAgenda + ", " + idUS + ");");
+                }
+
+                AgregarControles(campoSel, chB, nuevoHidF, lbTpVeh, lbMarca, lbColor, lbPlaca, linkAuto);
                 //contadorControles++;
             }
             catch (Exception ex)
@@ -172,7 +218,7 @@ namespace Presentacion.Pres
             }
         }
 
-        protected void AgregarControles(Label nombreContr, CheckBox chB, HiddenField nuevoHidF, Label tpVeh, Label marca, Label color, Label placa)
+        protected void AgregarControles(Label nombreContr, CheckBox chB, HiddenField nuevoHidF, Label tpVeh, Label marca, Label color, Label placa, HyperLink hpl)
         {
             try
             {
@@ -188,6 +234,11 @@ namespace Presentacion.Pres
                 PanelConVisita.Controls.Add(placa);
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
                 PanelConVisita.Controls.Add(chB);
+                PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
+                if (hpl != null)
+                {
+                    PanelConVisita.Controls.Add(hpl);
+                }
                 PanelConVisita.Controls.Add(new LiteralControl("</td></tr>"));
             }
             catch (Exception ex)
@@ -216,6 +267,26 @@ namespace Presentacion.Pres
 
             //Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
             idRespuesta.Text = "Se registro la asistencia...";
+        }
+
+        protected void AgregaAuto_Click(object sender, EventArgs e)
+        {
+            string agendaID = idAgendaAutoHid.Value;
+            string idUss = idUsAutoHid.Value;
+
+            if (ServiciosGen.agregaAuto(agendaID, idUss, ListaTPAuto.SelectedItem.Value, ListaMarcaAuto.SelectedItem.Value, ListaColorAuto.SelectedItem.Value, TxtPlacaAuto.Text))
+            {
+
+                ListItem nombreItm = ListNombre.SelectedItem;
+                ListItem hrItm = ListHr.SelectedItem;
+
+                agregaVisitantes(null, nombreItm.Value, hrItm.Value);
+                idRespuesta.Text = "";
+            }else
+                idRespuesta.Text = "NO Se registro el auto...";
+
+            //Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
+
         }
     }
 

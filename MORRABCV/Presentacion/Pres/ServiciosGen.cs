@@ -148,58 +148,30 @@ namespace Presentacion.Pres
 
             string SQL = "SELECT DISTINCT PR.PERSONA_ID , " +
                         "PR.NOMBRE + ' ' + PR.AP_PATERNO + ' ' + PR.AP_MATERNO, " +
-                        "PR.PUESTO_ID, " +
-                        "PUE.DESC_PUESTO, " +
+                        "ISNULL(PR.PUESTO_ID,0), " +
+                        "ISNULL((SELECT TOP 1 PU.DESC_PUESTO FROM PUESTO PU WHERE PU.ID_PUESTO = PR.PUESTO_ID),''), " +
                         "MV.ID_VISITA, " +
                         "MV.DESC_VISITA, " +
                         "HRS.IDHORA, " +
                         "HRS.DES_HORA, " +
                         "AG.FECHA_INICIO, " +
-                        "AG.AGENDA_ID " +
-                        ",(SELECT TOP 1 TV.DESC_TIPO_VEHICULO "+
-                        "FROM " +
-                        "CASETA CS, " +
-                        "TIPO_VEHICULO TV " +
-                        "WHERE " +
-                        "TV.ID_VEHICULO = CS.ID_TIPO_VEHICULO " +
-                        "AND CS.ID_VISITA = PR.PERSONA_ID " +
-                        ") AS TP_VEH " +
-                        ",(SELECT TOP 1 MR.DESC_MARCA " +
-                        "FROM " +
-                        "CASETA CS, " +
-                        "MARCA MR " +
-                        "WHERE " +
-                        "MR.ID_MARCA = CS.ID_MARCA " +
-                        "AND CS.ID_VISITA = PR.PERSONA_ID " +
-                        ") AS MARCA " +
-                        ",(SELECT TOP 1 COL.DESC_COLOR " +
-                        "FROM " +
-                        "CASETA CS, " +
-                        "COLOR COL " +
-                        "WHERE " +
-                        "COL.ID_COLOR = CS.ID_COLOR " +
-                        "AND CS.ID_VISITA = PR.PERSONA_ID " +
-                        ") AS COLOR " +
-                        ",(SELECT TOP 1 CS.PLACA " +
-                        "FROM " +
-                        "CASETA CS " +
-                        "WHERE " +
-                        "CS.ID_VISITA = PR.PERSONA_ID " +
-                        ") AS PLACA " +
-
+                        "AG.AGENDA_ID, " +
+                        "ISNULL((SELECT TOP 1 TV.DESC_TIPO_VEHICULO FROM AUTOS CS, TIPO_VEHICULO TV WHERE TV.ID_VEHICULO = CS.ID_TIPO_VEHICULO AND CS.ID_VISITA = PR.PERSONA_ID ),'') AS TP_VEH , " +
+                        "ISNULL((SELECT TOP 1 MR.DESC_MARCA FROM AUTOS CS, MARCA MR WHERE MR.ID_MARCA = CS.ID_MARCA AND CS.ID_VISITA = PR.PERSONA_ID),'') AS MARCA, " +
+                        "ISNULL((SELECT TOP 1 COL.DESC_COLOR FROM AUTOS CS, COLOR COL WHERE COL.ID_COLOR = CS.ID_COLOR AND CS.ID_VISITA = PR.PERSONA_ID ),'') AS COLOR, " +
+                        "ISNULL((SELECT TOP 1 CS.PLACA FROM AUTOS CS WHERE CS.ID_VISITA = PR.PERSONA_ID ),'') AS PLACA " +
                         "FROM " +
                         "AGENDA AG, " +
                         "PREREGISTRO PR, " +
                         "MOTIVO_VISITA MV, " +
-                        "PUESTO PUE, " +
-                        "HORAS HRS " +
+                        "HORAS HRS, " +
+                        "CONTROLVISITAS CV " +
                         "WHERE " +
                         "AG.FECHA_INICIO = CONVERT(DATE, GETDATE()) " +
-                        "AND AG.ID_CONTACTO = PR.PERSONA_ID " +
-                        "AND PUE.ID_PUESTO = PR.PUESTO_ID " +
+                        "AND CV.PERSONA_ID = PR.PERSONA_ID " +
+                        "AND CV.AGENDA_ID = AG.AGENDA_ID " +
                         "AND MV.ID_VISITA = AG.MVO_VISITA_ID " +
                         "AND HRS.IDHORA = AG.HORA " +
-//                        "AND PR.ESTADO_REGISTRO = '"+tpUs+"' "+
                         "AND AG.AGENDA_ID IN ( " +
                         " SELECT AG1.AGENDA_ID " +
                         " FROM " +
@@ -208,9 +180,8 @@ namespace Presentacion.Pres
                         " AG1.ID_ANFITRION = " + idUS +
                         " AND AG1.HORA = "+ idHora +
                         ") " +
-                        " AND ( NOT EXISTS(SELECT CV.AGENDA_ID, CV.PERSONA_ID FROM CONTROLVISITAS CV WHERE CV.AGENDA_ID IN( "+
-                         " SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = "+idUS+" AND AG1.HORA = " + idHora +
-                         " )  AND  CV.PERSONA_ID = PR.PERSONA_ID )) ";
+                        "AND CV.HORA_LLEGADA IS NULL "
+                         ;
 
 
             if (tpUs != null && tpUs != "")
@@ -226,45 +197,45 @@ namespace Presentacion.Pres
         {
 
             string SQL = "SELECT DISTINCT PR.PERSONA_ID , " +
-                        "PR.NOMBRE + ' ' + PR.AP_PATERNO + ' ' + PR.AP_MATERNO, " +
-                        "PR.PUESTO_ID, " +
-                        "PUE.DESC_PUESTO, " +
-                        "MV.ID_VISITA, " +
-                        "MV.DESC_VISITA, " +
-                        "HRS.IDHORA, " +
-                        "HRS.DES_HORA, " +
-                        "AG.FECHA_INICIO, " +
-                        "AG.AGENDA_ID " +
-                        "FROM " +
-                        "AGENDA AG, " +
-                        "PREREGISTRO PR, " +
-                        "MOTIVO_VISITA MV, " +
-                        "PUESTO PUE, " +
-                        "HORAS HRS " +
-                        "WHERE " +
-                        "AG.FECHA_INICIO = CONVERT(DATE, GETDATE()) " +
-                        "AND AG.ID_CONTACTO = PR.PERSONA_ID " +
-                        "AND PUE.ID_PUESTO = PR.PUESTO_ID " +
-                        "AND MV.ID_VISITA = AG.MVO_VISITA_ID " +
-                        "AND HRS.IDHORA = AG.HORA " +
-                        //                        "AND PR.ESTADO_REGISTRO = '"+tpUs+"' "+
-                        "AND AG.AGENDA_ID IN ( " +
-                        " SELECT AG1.AGENDA_ID " +
-                        " FROM " +
-                        " AGENDA AG1 " +
-                        " WHERE " +
-                        " AG1.ID_ANFITRION = " + idUS +
-                        " AND AG1.HORA = " + idHora +
-                        ") " +
-                        " AND ( EXISTS(SELECT CV.AGENDA_ID, CV.PERSONA_ID FROM CONTROLVISITAS CV WHERE CV.AGENDA_ID IN( " +
-                         " SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = " + idUS + " AND AG1.HORA = " + idHora +
-                         " )  AND  CV.PERSONA_ID = PR.PERSONA_ID )) "+
-
-                         " AND( NOT EXISTS( " +
-                         " SELECT * FROM REGISTRO REG " +
-                         " WHERE " +
-                         " REG.AGENDA_ID IN(SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = "+idUS+" AND AG1.HORA = "+idHora+") " +
-                         " AND REG.PERSONA_ID = PR.PERSONA_ID ))";
+                           "PR.NOMBRE + ' ' + PR.AP_PATERNO + ' ' + PR.AP_MATERNO, " +
+                           "ISNULL(PR.PUESTO_ID,0), " +
+                           "ISNULL((SELECT TOP 1 PU.DESC_PUESTO FROM PUESTO PU WHERE PU.ID_PUESTO = PR.PUESTO_ID),''), " +
+                           "MV.ID_VISITA, " +
+                           "MV.DESC_VISITA, " +
+                           "HRS.IDHORA, " +
+                           "HRS.DES_HORA, " +
+                           "AG.FECHA_INICIO, " +
+                           "AG.AGENDA_ID, " +
+                           "ISNULL((SELECT TOP 1 TV.DESC_TIPO_VEHICULO FROM AUTOS CS, TIPO_VEHICULO TV WHERE TV.ID_VEHICULO = CS.ID_TIPO_VEHICULO AND CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS TP_VEH , " +
+                           "ISNULL((SELECT TOP 1 MR.DESC_MARCA FROM AUTOS CS, MARCA MR WHERE MR.ID_MARCA = CS.ID_MARCA AND CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS MARCA, " +
+                           "ISNULL((SELECT TOP 1 COL.DESC_COLOR FROM AUTOS CS, COLOR COL WHERE COL.ID_COLOR = CS.ID_COLOR AND CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS COLOR, " +
+                           "ISNULL((SELECT TOP 1 CS.PLACA FROM AUTOS CS WHERE CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS PLACA " +
+                           "FROM " +
+                           "AGENDA AG, " +
+                           "PREREGISTRO PR, " +
+                           "MOTIVO_VISITA MV, " +
+                           "HORAS HRS, " +
+                           "CONTROLVISITAS CV " +
+                           "WHERE " +
+                           "AG.FECHA_INICIO = CONVERT(DATE, GETDATE()) " +
+                           "AND CV.PERSONA_ID = PR.PERSONA_ID " +
+                           "AND CV.AGENDA_ID = AG.AGENDA_ID " +
+                           "AND MV.ID_VISITA = AG.MVO_VISITA_ID " +
+                           "AND HRS.IDHORA = AG.HORA " +
+                           "AND AG.AGENDA_ID IN ( " +
+                           " SELECT AG1.AGENDA_ID " +
+                           " FROM " +
+                           " AGENDA AG1 " +
+                           " WHERE " +
+                           " AG1.ID_ANFITRION = " + idUS +
+                           " AND AG1.HORA = " + idHora +
+                           ") " +
+                           "AND CV.HORA_LLEGADA IS NOT NULL " +
+                           " AND( NOT EXISTS( " +
+                           " SELECT * FROM REGISTRO REG " +
+                           " WHERE " +
+                           " REG.AGENDA_ID IN(SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = " + idUS + " AND AG1.HORA = " + idHora + ") " +
+                           " AND REG.PERSONA_ID = PR.PERSONA_ID ))"; 
 
 
             if (tpUs != null && tpUs != "")
@@ -328,20 +299,70 @@ namespace Presentacion.Pres
             return sqlDispatcher.getColConsulta(SQL);
         }
 
+        public static ArrayList getTPAuto(string idTPAuto)
+        {
+            string SQL = "SELECT  TP.*  FROM  TIPO_VEHICULO TP   ";
+
+            if (idTPAuto != null && idTPAuto != "" && idTPAuto != "0")
+            {
+                SQL = SQL + "WHERE TP.ID_VEHICULO = " + idTPAuto;
+            }
+
+            sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
+            return sqlDispatcher.getColConsulta(SQL);
+        }
+
+        public static ArrayList getMarca(string idMarca)
+        {
+            string SQL = "SELECT  TP.*  FROM  MARCA TP ";
+
+            if (idMarca != null && idMarca != "" && idMarca != "0")
+            {
+                SQL = SQL + "WHERE TP.ID_MARCA = " + idMarca;
+            }
+
+            sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
+            return sqlDispatcher.getColConsulta(SQL);
+        }
+
+        public static ArrayList getColor(string idColor)
+        {
+            string SQL = "SELECT  TP.*  FROM  COLOR TP ";
+
+            if (idColor != null && idColor != "" && idColor != "0")
+            {
+                SQL = SQL + "WHERE TP.ID_COLOR = " + idColor;
+            }
+
+            sqlDispatcher.getConexion(confBD.NomBD, confBD.Servidor, confBD.Us, confBD.Pwd, Int32.Parse(confBD.BD));
+            return sqlDispatcher.getColConsulta(SQL);
+        }
+
         public static Boolean agregaControlVisita(string idAgenda, string idUs)
         {
 
-            string sql = "INSERT INTO CONTROLVISITAS VALUES(" + idAgenda + ", " + idUs + ", GetDate())";
+            //string sql = "INSERT INTO CONTROLVISITAS VALUES(" + idAgenda + ", " + idUs + ", GetDate())";
+            string sql = "UPDATE CONTROLVISITAS SET HORA_LLEGADA = GetDate() WHERE AGENDA_ID = " + idAgenda + " AND PERSONA_ID = " + idUs + " ";
             return sqlDispatcher.ejecutaSQL(sql);
         }
 
         public static Boolean actualizaRegistro(string idAgenda, string idUs, string observaciones)
         {
-            string sql = "INSERT INTO REGISTRO VALUES(" + idAgenda + ", " + idUs + ", GetDate(),"+observaciones+")";
+            string sql = "INSERT INTO REGISTRO VALUES(" + idAgenda + ", " + idUs + ", GetDate(), "+observaciones+")";
             //string sql = "UPDATE REGISTRO SET HORA_LLEGADA = GetDate(), OBSERVACIONES = '"+observaciones+"' WHERE AGENDA_ID = " + idAgenda + " AND  PERSONA_ID = " + idUs + " ";
             return sqlDispatcher.ejecutaSQL(sql);
 
         }
+
+
+        public static Boolean agregaAuto(string idAgenda, string idUs, string tpVehi, string marca, string color, string placa)
+        {
+            string sql = "INSERT INTO AUTOS VALUES(" + idAgenda + ", " + idUs + ", " + marca + ", " + color + ", " + tpVehi + ", '" + placa + "' )";
+            //string sql = "UPDATE REGISTRO SET HORA_LLEGADA = GetDate(), OBSERVACIONES = '"+observaciones+"' WHERE AGENDA_ID = " + idAgenda + " AND  PERSONA_ID = " + idUs + " ";
+            return sqlDispatcher.ejecutaSQL(sql);
+
+        }
+
 
         public static string toStringArrayList(ArrayList lista, string sep)
         {

@@ -2,7 +2,7 @@
 <config>
 	<BD>
 		<item name="NomBD" >
-			<value>MORRABCV_DESARROLLO</value>
+			<value>MORRABCV_DESARROLLO2</value>
 		</item>
 		<item name="Servidor" >
 			<value>DESKTOP-T62LOJN\SQLEXPRESS2</value>
