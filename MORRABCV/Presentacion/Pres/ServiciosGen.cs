@@ -156,6 +156,37 @@ namespace Presentacion.Pres
                         "HRS.DES_HORA, " +
                         "AG.FECHA_INICIO, " +
                         "AG.AGENDA_ID " +
+                        ",(SELECT TOP 1 TV.DESC_TIPO_VEHICULO "+
+                        "FROM " +
+                        "CASETA CS, " +
+                        "TIPO_VEHICULO TV " +
+                        "WHERE " +
+                        "TV.ID_VEHICULO = CS.ID_TIPO_VEHICULO " +
+                        "AND CS.ID_VISITA = PR.PERSONA_ID " +
+                        ") AS TP_VEH " +
+                        ",(SELECT TOP 1 MR.DESC_MARCA " +
+                        "FROM " +
+                        "CASETA CS, " +
+                        "MARCA MR " +
+                        "WHERE " +
+                        "MR.ID_MARCA = CS.ID_MARCA " +
+                        "AND CS.ID_VISITA = PR.PERSONA_ID " +
+                        ") AS MARCA " +
+                        ",(SELECT TOP 1 COL.DESC_COLOR " +
+                        "FROM " +
+                        "CASETA CS, " +
+                        "COLOR COL " +
+                        "WHERE " +
+                        "COL.ID_COLOR = CS.ID_COLOR " +
+                        "AND CS.ID_VISITA = PR.PERSONA_ID " +
+                        ") AS COLOR " +
+                        ",(SELECT TOP 1 CS.PLACA " +
+                        "FROM " +
+                        "CASETA CS " +
+                        "WHERE " +
+                        "CS.ID_VISITA = PR.PERSONA_ID " +
+                        ") AS PLACA " +
+
                         "FROM " +
                         "AGENDA AG, " +
                         "PREREGISTRO PR, " +

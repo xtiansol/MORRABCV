@@ -88,8 +88,8 @@
                                         <table style="width:100%">
                                             <tr>
                                                 <td  style="width:100%">
-                                                    <asp:Panel runat="server" ID="PanelConVisita" Width="90%">
-                                                        <table border='1' width ='90%' > <tr style='background-color:#990000'><td  style='width:50%'>NOMBRE VISITANTE</td><td  style='width:20%'>&nbsp;</td><td  style='width:30%'>Asistió</td></tr> </table>
+                                                    <asp:Panel runat="server" ID="PanelConVisita" Width="100%">
+                                                        <table border='1' width ='100%' > <tr style='background-color:#990000'> <td  style='width:38%'>NOMBRE VISITANTE</td><td  style='width:18%'>TP VEHÍCULO</td><td  style='width:15%'>MARCA</td><td  style='width:10%'>COLOR</td><td  style='width:10%'>PLACA</td><td  style='width:10%'>Asistió</td></tr> </table>
                                                     </asp:Panel>
                                                 </td>
                                     

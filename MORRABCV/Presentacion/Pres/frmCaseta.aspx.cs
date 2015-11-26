@@ -122,13 +122,13 @@ namespace Presentacion.Pres
         {
             //            camposFin.Clear();
             PanelConVisita.Controls.Clear();
-            PanelConVisita.Controls.Add(new LiteralControl("<table border='1' width ='90%' > <tr style='background-color:#990000'><td  style='width:50%'>NOMBRE VISITANTE</td><td  style='width:20%'>&nbsp;</td><td  style='width:30%'>Asistió</td></tr> "));
+            PanelConVisita.Controls.Add(new LiteralControl("<table border='1' width ='100%' > <tr style='background-color:#990000'> <td  style='width:38%'>NOMBRE VISITANTE</td><td  style='width:18%'>TP VEHÍCULO</td><td  style='width:15%'>MARCA</td><td  style='width:10%'>COLOR</td><td  style='width:10%'>PLACA</td><td  style='width:10%'>Asistió</td></tr>"));
 
             ArrayList arrVisitantes = ServiciosGen.getAgendaVisitantes(idUS, idHora, "E");
 
             foreach(ArrayList v1 in arrVisitantes)
             {
-                agregarVisitante((string)v1[0], (string)v1[1],(string)v1[9]);
+                agregarVisitante((string)v1[0], (string)v1[1],(string)v1[9], (string)v1[10], (string)v1[11], (string)v1[12], (string)v1[13]);
             }
 
             PanelConVisita.Controls.Add(new LiteralControl("</table>"));
@@ -136,7 +136,7 @@ namespace Presentacion.Pres
 
 
         }
-        protected void agregarVisitante(string idUS, string nombre, string idAgenda)
+        protected void agregarVisitante(string idUS, string nombre, string idAgenda, string tpVehi, string marca, string color, string placa)
         {
             try
             {
@@ -150,7 +150,20 @@ namespace Presentacion.Pres
                 HiddenField nuevoHidF = new HiddenField();
                 nuevoHidF.ID = "hdf" + nombre;
                 nuevoHidF.Value = nombre;
-                AgregarControles(campoSel, chB, nuevoHidF);
+
+                Label lbTpVeh = new Label();
+                lbTpVeh.Text = (tpVehi!=null && tpVehi.ToUpper()!="NULL")? tpVehi:"";
+
+                Label lbMarca = new Label();
+                lbMarca.Text = (marca != null && marca.ToUpper() != "NULL") ? marca : ""; 
+
+                Label lbColor = new Label();
+                lbColor.Text = (color != null && color.ToUpper() != "NULL") ? color : "";
+
+                Label lbPlaca = new Label();
+                lbPlaca.Text = (placa != null && placa.ToUpper() != "NULL") ? placa : "";
+
+                AgregarControles(campoSel, chB, nuevoHidF, lbTpVeh, lbMarca, lbColor, lbPlaca);
                 //contadorControles++;
             }
             catch (Exception ex)
@@ -159,15 +172,20 @@ namespace Presentacion.Pres
             }
         }
 
-        protected void AgregarControles(Label nombreContr, CheckBox chB, HiddenField nuevoHidF)
+        protected void AgregarControles(Label nombreContr, CheckBox chB, HiddenField nuevoHidF, Label tpVeh, Label marca, Label color, Label placa)
         {
             try
             {
-                PanelConVisita.Controls.Add(new LiteralControl("<tr>"));
-                PanelConVisita.Controls.Add(new LiteralControl("<td>"));
+                PanelConVisita.Controls.Add(new LiteralControl("<tr><td>"));
                 PanelConVisita.Controls.Add(nombreContr);
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
-                PanelConVisita.Controls.Add(new LiteralControl("&nbsp;&nbsp;&nbsp;"));
+                PanelConVisita.Controls.Add(tpVeh);
+                PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
+                PanelConVisita.Controls.Add(marca);
+                PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
+                PanelConVisita.Controls.Add(color);
+                PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
+                PanelConVisita.Controls.Add(placa);
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
                 PanelConVisita.Controls.Add(chB);
                 PanelConVisita.Controls.Add(new LiteralControl("</td></tr>"));
