@@ -159,7 +159,8 @@ namespace Presentacion.Pres
                         "ISNULL((SELECT TOP 1 TV.DESC_TIPO_VEHICULO FROM AUTOS CS, TIPO_VEHICULO TV WHERE TV.ID_VEHICULO = CS.ID_TIPO_VEHICULO AND CS.ID_VISITA = PR.PERSONA_ID ),'') AS TP_VEH , " +
                         "ISNULL((SELECT TOP 1 MR.DESC_MARCA FROM AUTOS CS, MARCA MR WHERE MR.ID_MARCA = CS.ID_MARCA AND CS.ID_VISITA = PR.PERSONA_ID),'') AS MARCA, " +
                         "ISNULL((SELECT TOP 1 COL.DESC_COLOR FROM AUTOS CS, COLOR COL WHERE COL.ID_COLOR = CS.ID_COLOR AND CS.ID_VISITA = PR.PERSONA_ID ),'') AS COLOR, " +
-                        "ISNULL((SELECT TOP 1 CS.PLACA FROM AUTOS CS WHERE CS.ID_VISITA = PR.PERSONA_ID ),'') AS PLACA " +
+                        "ISNULL((SELECT TOP 1 CS.PLACA FROM AUTOS CS WHERE CS.ID_VISITA = PR.PERSONA_ID ),'') AS PLACA, " +
+                        "ISNULL(CV.HORA_LLEGADA,'') HR_LLEGADA " +
                         "FROM " +
                         "AGENDA AG, " +
                         "PREREGISTRO PR, " +
@@ -179,8 +180,8 @@ namespace Presentacion.Pres
                         " WHERE " +
                         " AG1.ID_ANFITRION = " + idUS +
                         " AND AG1.HORA = "+ idHora +
-                        ") " +
-                        "AND CV.HORA_LLEGADA IS NULL "
+                        ") "
+                        //+ "AND CV.HORA_LLEGADA IS NULL "
                          ;
 
 
@@ -209,7 +210,9 @@ namespace Presentacion.Pres
                            "ISNULL((SELECT TOP 1 TV.DESC_TIPO_VEHICULO FROM AUTOS CS, TIPO_VEHICULO TV WHERE TV.ID_VEHICULO = CS.ID_TIPO_VEHICULO AND CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS TP_VEH , " +
                            "ISNULL((SELECT TOP 1 MR.DESC_MARCA FROM AUTOS CS, MARCA MR WHERE MR.ID_MARCA = CS.ID_MARCA AND CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS MARCA, " +
                            "ISNULL((SELECT TOP 1 COL.DESC_COLOR FROM AUTOS CS, COLOR COL WHERE COL.ID_COLOR = CS.ID_COLOR AND CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS COLOR, " +
-                           "ISNULL((SELECT TOP 1 CS.PLACA FROM AUTOS CS WHERE CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS PLACA " +
+                           "ISNULL((SELECT TOP 1 CS.PLACA FROM AUTOS CS WHERE CS.ID_VISITA = PR.PERSONA_ID AND CS.ID_AGENDA = AG.AGENDA_ID ),'') AS PLACA, " +
+                           "ISNULL((SELECT TOP 1 REG.HORA_LLEGADA FROM REGISTRO REG WHERE REG.AGENDA_ID = AG.AGENDA_ID AND REG.PERSONA_ID = PR.PERSONA_ID ), '') AS HORA_REG, " +
+                           "ISNULL((SELECT TOP 1 REG.OBSERVACIONES FROM REGISTRO REG WHERE REG.AGENDA_ID = AG.AGENDA_ID AND REG.PERSONA_ID = PR.PERSONA_ID ), '') AS OBSERVACIONES " +
                            "FROM " +
                            "AGENDA AG, " +
                            "PREREGISTRO PR, " +
@@ -230,12 +233,13 @@ namespace Presentacion.Pres
                            " AG1.ID_ANFITRION = " + idUS +
                            " AND AG1.HORA = " + idHora +
                            ") " +
-                           "AND CV.HORA_LLEGADA IS NOT NULL " +
-                           " AND( NOT EXISTS( " +
-                           " SELECT * FROM REGISTRO REG " +
-                           " WHERE " +
-                           " REG.AGENDA_ID IN(SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = " + idUS + " AND AG1.HORA = " + idHora + ") " +
-                           " AND REG.PERSONA_ID = PR.PERSONA_ID ))"; 
+                           "AND CV.HORA_LLEGADA IS NOT NULL " 
+                           //+ " AND ( NOT EXISTS( " +
+                           //" SELECT * FROM REGISTRO REG " +
+                           //" WHERE " +
+                           //" REG.AGENDA_ID IN(SELECT AG1.AGENDA_ID  FROM  AGENDA AG1  WHERE  AG1.ID_ANFITRION = " + idUS + " AND AG1.HORA = " + idHora + ") " +
+                           //" AND REG.PERSONA_ID = PR.PERSONA_ID ))"
+                           ; 
 
 
             if (tpUs != null && tpUs != "")

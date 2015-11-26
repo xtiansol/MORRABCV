@@ -47,66 +47,27 @@
 
 
         function mpeSeleccionOnOk() {
-            alert("ya entre...");
-            //var lista1 = $("#" + gPrefijo + "CamposSeleccionados");
-            //var listaF = document.getElementById(gPrefijo + "CamposSeleccionadosFin");
-            //var filtroFinVar = "";
-            //var campoNom = "";
-            //var contF = 0;
 
-            //if ($("#" + gPrefijo + "CamposSeleccionados option").length > 0) {
+            if ($("#" + gPrefijo + "ListaTPAuto option:selected").index() <= 0) {
+                alert("Seleccione un Tipo de Auto.");
+                return false;
+            }
 
-            //    $('select#' + gPrefijo + 'CamposSeleccionados').find('option').each(function () {
+            if ($("#" + gPrefijo + "ListaMarcaAuto option:selected").index() <= 0) {
+                alert("Seleccione la marca del Auto.");
+                return false;
+            }
 
-            //        var campoHD = $(this).val();
+            if ($("#" + gPrefijo + "ListaColorAuto option:selected").index() <= 0) {
+                alert("Seleccione el Color del Auto.");
+                return false;
+            }
 
-            //        if ($("#" + "hdf" + campoHD) != null) {
+            if ($("#" + gPrefijo + "TxtPlacaAuto").val() == "") {
+                alert("Ingrese la placa del Auto.");
+                return false;
+            }
 
-            //            var campoFin = "";
-            //            var campoAlias = "";
-            //            var combo = $("#" + gPrefijo + "cmb" + campoHD + " option:selected");
-            //            var x = combo.index();
-            //            var valorCampo = $("#" + gPrefijo + "txt" + campoHD).val();
-            //            if (x > 0 && valorCampo != null && valorCampo != "") {
-            //                var comboText = x > 0 ? combo.val() : "";
-            //                //var text = $("#" + gPrefijo + "txt" + campoHD).val();
-            //                //var filtro = document.getElementById("hiddenFiltros");
-            //                campoFin = campoHD + " " + comboText + " '" + $.trim(valorCampo) + "'";
-            //                filtroFinVar = filtroFinVar + "|" + campoFin;
-            //                campoNom = campoNom + "|" + campoHD;
-            //                var no = new Option();
-            //                no.value = campoFin;
-            //                no.text = campoFin;
-            //                listaF[contF] = no;
-            //                contF++;
-            //            }
-            //        }
-
-            //    });
-            //    if (filtroFinVar == "" && campoNom == "") {
-            //        alert("No existen campos para agregar filtros!!");
-            //    } else {
-            //        $.ajax({
-            //            type: "POST",
-            //            url: "../Reportes/SolicitudesGen.asmx/AgregaFiltros",
-            //            data: "{filtroFin:\"" + filtroFinVar + "\",campos:\"" + campoNom + "\"}",
-            //            contentType: "application/json; charset=utf-8",
-            //            dataType: "json",
-            //            success: function (msg) {
-            //                if (msg.hasOwnProperty('d')) {
-            //                    msg = msg.d;
-            //                }
-            //                var json = JSON.parse(msg);
-            //                alert(json.mensaje);
-            //            },
-            //            error: function (xhr, status, error) {
-            //                alert("No se pudo agregar el Filtro...");
-            //            }
-            //        });
-            //    }
-            //} else {
-            //    alert("Debe agregar campos a la lista de campos seleccionados.");
-            //}
             return true;
 
         }
@@ -231,7 +192,7 @@
                                                     </table>
                                             </div>
                                      </div>
-                                    <asp:Button ID="Button1" CssClass="btn btn-default" runat="server" Text="Aceptar1" OnClick ="AgregaAuto_Click" />
+                                    <asp:Button ID="Button1" CssClass="btn btn-default" runat="server" Text="Aceptar1" OnClick ="AgregaAuto_Click" OnClientClick="javascript:return mpeSeleccionOnOk()" />
                                     
                                     &nbsp;&nbsp;
                                     <asp:Button ID="btnCancelar" CssClass="btn btn-default" runat="server" Text="Cancelar" />

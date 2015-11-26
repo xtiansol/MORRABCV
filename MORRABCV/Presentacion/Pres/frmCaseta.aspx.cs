@@ -162,7 +162,7 @@ namespace Presentacion.Pres
 
             foreach(ArrayList v1 in arrVisitantes)
             {
-                agregarVisitante((string)v1[0], (string)v1[1],(string)v1[9], (string)v1[10], (string)v1[11], (string)v1[12], (string)v1[13]);
+                agregarVisitante((string)v1[0], (string)v1[1],(string)v1[9], (string)v1[10], (string)v1[11], (string)v1[12], (string)v1[13], (string)v1[14]);
             }
 
             PanelConVisita.Controls.Add(new LiteralControl("</table>"));
@@ -170,7 +170,7 @@ namespace Presentacion.Pres
 
 
         }
-        protected void agregarVisitante(string idUS, string nombre, string idAgenda, string tpVehi, string marca, string color, string placa)
+        protected void agregarVisitante(string idUS, string nombre, string idAgenda, string tpVehi, string marca, string color, string placa, string hora)
         {
             try
             {
@@ -209,7 +209,18 @@ namespace Presentacion.Pres
                     linkAuto.Attributes.Add("onClick", "javascript:return ShowAgregaAutoModal(" + idAgenda + ", " + idUS + ");");
                 }
 
-                AgregarControles(campoSel, chB, nuevoHidF, lbTpVeh, lbMarca, lbColor, lbPlaca, linkAuto);
+                Label lbHoralleg = new Label();
+                lbHoralleg.Text = "";
+                if ( hora == null || hora.ToUpper() == "NULL" || hora == "")
+                {
+                    lbHoralleg.Text = "";
+                }
+                else
+                {
+                    lbHoralleg.Text = hora;
+                }
+
+                AgregarControles(campoSel, chB, nuevoHidF, lbTpVeh, lbMarca, lbColor, lbPlaca, linkAuto, lbHoralleg);
                 //contadorControles++;
             }
             catch (Exception ex)
@@ -218,7 +229,7 @@ namespace Presentacion.Pres
             }
         }
 
-        protected void AgregarControles(Label nombreContr, CheckBox chB, HiddenField nuevoHidF, Label tpVeh, Label marca, Label color, Label placa, HyperLink hpl)
+        protected void AgregarControles(Label nombreContr, CheckBox chB, HiddenField nuevoHidF, Label tpVeh, Label marca, Label color, Label placa, HyperLink hpl, Label hora)
         {
             try
             {
@@ -233,7 +244,15 @@ namespace Presentacion.Pres
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
                 PanelConVisita.Controls.Add(placa);
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
-                PanelConVisita.Controls.Add(chB);
+                if (hora.Text=="")
+                {
+                    PanelConVisita.Controls.Add(chB);
+                }
+                else
+                {
+                    PanelConVisita.Controls.Add(hora);
+                }
+                
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
                 if (hpl != null)
                 {
@@ -251,6 +270,8 @@ namespace Presentacion.Pres
         {
             string agendaID = idAgendaHid.Value;
             string idUss = idUsHid.Value;
+            ListItem nombreItm = ListNombre.SelectedItem;
+            ListItem hrItm = ListHr.SelectedItem;
 
             string[] words = agendaID.Split(',');
             string[] words2 = idUss.Split(',');
@@ -267,6 +288,7 @@ namespace Presentacion.Pres
 
             //Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
             idRespuesta.Text = "Se registro la asistencia...";
+            agregaVisitantes(null, nombreItm.Value, hrItm.Value);
         }
 
         protected void AgregaAuto_Click(object sender, EventArgs e)
@@ -282,9 +304,12 @@ namespace Presentacion.Pres
 
                 agregaVisitantes(null, nombreItm.Value, hrItm.Value);
                 idRespuesta.Text = "";
-            }else
+            }
+            else
+            {
                 idRespuesta.Text = "NO Se registro el auto...";
-
+            }
+            Response.Write("<script language='javascript'> alert('Respuesta...'); </script>");
             //Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
 
         }

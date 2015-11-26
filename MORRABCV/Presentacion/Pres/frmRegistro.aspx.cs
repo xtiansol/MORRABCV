@@ -128,7 +128,7 @@ namespace Presentacion.Pres
 
             foreach (ArrayList v1 in arrVisitantes)
             {
-                agregarVisitante((string)v1[0], (string)v1[1], (string)v1[9]);
+                agregarVisitante((string)v1[0], (string)v1[1], (string)v1[9], (string)v1[14], (string)v1[15]);
                 idAgendaHid.Value = (string)v1[9];
             }
 
@@ -137,7 +137,7 @@ namespace Presentacion.Pres
 
 
         }
-        protected void agregarVisitante(string idUS, string nombre, string idAgenda)
+        protected void agregarVisitante(string idUS, string nombre, string idAgenda, string hrReg, string observ)
         {
             try
             {
@@ -155,7 +155,31 @@ namespace Presentacion.Pres
                 HiddenField nuevoHidF = new HiddenField();
                 nuevoHidF.ID = "hdf" + nombre;
                 nuevoHidF.Value = nombre;
-                AgregarControles(campoSel, chB, tBox, nuevoHidF);
+
+                Label lhrReg = null;
+                Label lobserv = null;
+
+                if (hrReg == null || hrReg.ToUpper() == "NULL" || hrReg == "")
+                {
+                    lhrReg = null;
+                }
+                else
+                {
+                    lhrReg = new Label();
+                    lobserv = new Label();
+                    lhrReg.Text = hrReg;
+                    if(observ == null || observ.ToUpper() == "NULL" || observ == "")
+                    {
+                        lobserv.Text = "";
+                    }
+                    else
+                    {
+                        lobserv.Text = observ;
+                    }
+                }
+
+
+                AgregarControles(campoSel, chB, tBox, nuevoHidF, lhrReg, lobserv);
                 //contadorControles++;
             }
             catch (Exception ex)
@@ -164,7 +188,7 @@ namespace Presentacion.Pres
             }
         }
 
-        protected void AgregarControles(Label nombreContr, CheckBox chB, TextBox tbox, HiddenField nuevoHidF)
+        protected void AgregarControles(Label nombreContr, CheckBox chB, TextBox tbox, HiddenField nuevoHidF, Label hrReg, Label observ)
         {
             try
             {
@@ -174,9 +198,24 @@ namespace Presentacion.Pres
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
                 PanelConVisita.Controls.Add(new LiteralControl("&nbsp;&nbsp;&nbsp;"));
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
-                PanelConVisita.Controls.Add(chB);
+                if (hrReg == null)
+                {
+                    PanelConVisita.Controls.Add(chB);
+                }
+                else
+                {
+                    PanelConVisita.Controls.Add(hrReg);
+                }
+                
                 PanelConVisita.Controls.Add(new LiteralControl("</td><td>"));
-                PanelConVisita.Controls.Add(tbox);
+                if (hrReg == null)
+                {
+                    PanelConVisita.Controls.Add(tbox);
+                }
+                else
+                {
+                    PanelConVisita.Controls.Add(observ);
+                }
                 PanelConVisita.Controls.Add(new LiteralControl("</td></tr>"));
             }
             catch (Exception ex)
@@ -211,6 +250,8 @@ namespace Presentacion.Pres
             string agendaID = idAgendaHid.Value;
             string idUss = idUsHid.Value;
             string observs = idDesHid.Value;
+            ListItem nombreItm = ListNombre.SelectedItem;
+            ListItem hrItm = ListHr.SelectedItem;
 
             string[] words = agendaID.Split(',');
             string[] words2 = idUss.Split(',');
@@ -227,7 +268,7 @@ namespace Presentacion.Pres
                 }
             }
 
-            //Response.Write("<script language=javascript>alert('Se registro la asistencia...');</script>");
+            agregaVisitantes(null, nombreItm.Value, hrItm.Value);
             idRespuesta.Text = "Registro exitoso...";
         }
     }
